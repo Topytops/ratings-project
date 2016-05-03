@@ -24,21 +24,35 @@ class User(db.Model):
     zipcode = db.Column(db.String(15), nullable=True)
 
     def __repr__(self):
-        """ Procide info on user. """
+        """ Provide info on user. """
 
         return "<User user_id=%s email=%s" % (self.user_id, self.email)
 
 
 # Put your Movie and Rating model classes here.
 class Ratings(db.Model):
-      """Ratings table."""
+    """Ratings table."""
 
-      __tablename__ = "ratings"
+    __tablename__ = "ratings"
 
-      rating_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-      movie_id = db.Column(db.Integer, nullable=False)
-      user_id = db.Column(db.Integer, nullable=False)
-      score = db.Column(db.Integer, nullable=False)
+    rating_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.movie_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    score = db.Column(db.Integer, nullable=False)
+
+
+    user = db.relationship("User",
+
+                            backref=db.backref("ratings", order_by=rating_id))
+
+    movie = db.relationship("Movies",
+                            backref=db.backref("ratings", order_by=rating_id))
+
+    def __repr__(self):
+        """ Provide info on user. """
+
+        return "<Rating rating_id=%s movie_id=%s user_id=%s score=%s" % (self.rating_id, self.movie_id, self.user_id, self.score)
+
 
 class Movies (db.Model):
     """ Table of movies """
@@ -49,6 +63,11 @@ class Movies (db.Model):
     title = db.Column(db.String(200), nullable=False)
     released_at = db.Column(db.DateTime, nullable=True)
     imdb_url = db.Column(db.Text, nullable=True)
+
+    def __repr__(self):
+        """ Provide info on user. """
+
+        return "<Movie movie_id=%s title=%s released_at=%s imdb_url=%s" % (self.movie_id, self.title, self.released_at, self.imdb_url)
 
    
 
