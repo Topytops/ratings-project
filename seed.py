@@ -3,7 +3,7 @@
 from sqlalchemy import func
 from model import User
 import datetime
-# from model import Rating
+from model import Ratings
 from model import Movies
 
 from model import connect_to_db, db
@@ -38,6 +38,8 @@ def load_users():
 def load_movies():
     """Load movies from u.item into database."""
 
+    print "Movies"
+
     Movies.query.delete()
 
     for row in open("seed_data/u.item"):
@@ -67,7 +69,24 @@ def load_movies():
 def load_ratings():
     """Load ratings from u.data into database."""
 
-# user_id \t movie_id \t score \t timestamp.
+    print "Ratings"
+
+    Ratings.query.delete()
+
+    for row in open("seed_data/u.data"):
+        row = row.rstrip()
+        user_id, movie_id, score, timestamp = row.split()
+
+        rating = Ratings(movie_id=movie_id,
+                    user_id=user_id,
+                    score=score)
+
+        db.session.add(rating)
+
+    db.session.commit()
+                    
+
+
 
 def set_val_user_id():
     """Set value for the next user_id after seeding database"""
