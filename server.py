@@ -24,12 +24,29 @@ def index():
 
     return render_template("homepage.html")
 
+
 @app.route('/users')
 def user_list():
 	"""Show list of users"""
 
 	users = User.query.all()
-	return render_template("user_list.html", users=users) 
+	return render_template("user_list.html", users=users)
+
+
+@app.route('/checking_in')
+def sign_in():
+	"""Adding end_users"""
+
+
+
+
+@app.route('/check_in')
+def display_form():
+	"""show checking_in form"""
+
+	return render_template("checking_in.html")
+
+
 
 
 if __name__ == "__main__":

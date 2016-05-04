@@ -2,7 +2,11 @@
 {% block content %}
 
     <h2>Login Form</h2>
-    <form>
-      <input type="text"
+    <form action="/checking_in" method="POST">
+      <p>Enter your email and password</p>
+      Email: <input type="text" name="email"><br><br>
+      Password: <input type="text" name="password"><br><br>
+      <input type="submit">
+    </form>    
     
 {% endblock %}
