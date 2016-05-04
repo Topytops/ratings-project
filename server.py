@@ -33,10 +33,28 @@ def user_list():
 	return render_template("user_list.html", users=users)
 
 
-@app.route('/checking_in')
+@app.route('/checking_in', methods=['POST'])
 def sign_in():
 	"""Adding end_users"""
+	email = request.form.get("email")
+	password = request.form.get("password")
 
+	checks = User.query.filter_by(email=email).all()
+
+	if checks == []:
+
+		user = User(email=email,
+                    password=password)
+                    
+		db.session.add(user)
+
+		db.session.commit()
+
+		return render_template("homepage.html")
+
+	else:
+		return render_template("homepage.html")
+			
 
 
 
