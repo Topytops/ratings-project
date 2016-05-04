@@ -2,7 +2,7 @@
 
 from jinja2 import StrictUndefined
 
-from flask import Flask, render_template, redirect, request, flash, sessions
+from flask import Flask, render_template, redirect, request, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, User, Ratings, Movies
@@ -39,25 +39,32 @@ def sign_in():
 	email = request.form.get("email")
 	password = request.form.get("password")
 
-	checks = User.query.filter_by(email=email).all()
+	checks = User.query.filter_by(email=email).first()
 
-	if checks == []:
+	if checks == None:
 
 		user = User(email=email,
                     password=password)
                     
 		db.session.add(user)
-
 		db.session.commit()
 
 		return render_template("homepage.html")
 
 	else:
+		session["user_id"] = checks.user_id
+		flash('You were successfully logged in')
 		return render_template("homepage.html")
+
+
+@app.route('/logout')
+def logout():
+	"""Logging out"""
+	session.pop('user_id', None)
+	flash('you were logged out')
+	return render_template("homepage.html")
+
 			
-
-
-
 @app.route('/check_in')
 def display_form():
 	"""show checking_in form"""

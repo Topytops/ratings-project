@@ -8,5 +8,16 @@
 
 <h2>Users</h2>
 <p><a href="/users">View all users</a></p>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes">
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+<p><a href="/check_in">Login in</a></p>
+<p><a href="/logout">Log out</a></p>
 
 {% endblock %}
