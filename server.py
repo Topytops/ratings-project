@@ -33,7 +33,7 @@ def user_list():
 	return render_template("user_list.html", users=users)
 
 
-@app.route('/checking_in', methods=['POST'])
+@app.route('/sign_in', methods=['POST'])
 def sign_in():
 	"""Adding end_users"""
 	email = request.form.get("email")
@@ -65,14 +65,30 @@ def logout():
 	return render_template("homepage.html")
 
 			
-@app.route('/check_in')
+@app.route('/login')
 def display_form():
-	"""show checking_in form"""
+	"""show login form"""
 
-	return render_template("checking_in.html")
+	return render_template("login.html")
 
 
+@app.route('/users/<user_id>')
+def user_page(user_id):
+	""" get user info page """
 
+	user = User.query.filter_by(user_id=user_id).first()
+
+	user_ratings = db.session.query(Movies.title, Ratings.movie_id, Ratings.score, Ratings.user_id).join(Ratings).filter_by(user_id=user_id)
+
+	return render_template("user_detail.html", user_id=user, user_ratings=user_ratings)
+
+
+@app.route('/movies')
+def movie_list():
+	"""Show list of movies"""
+
+	movies = Movies.query.order_by(Movies.title).all()
+	return render_template("movie_list.html", movies=movies)
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
